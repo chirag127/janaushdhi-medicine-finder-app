@@ -1,0 +1,19 @@
+{
+  "name": "oriz-janaushdhi-app",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@chirag127/astro-test-utils": "^0.1.1",
+    "@playwright/test": "^1.48.0",
+    "@vitest/coverage-v8": "^2.0.0",
+    "@vitest/ui": "^2.0.0",
+    "happy-dom": "^15.0.0",
+    "vitest": "^2.0.0"
+  }
+}
