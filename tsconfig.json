@@ -2,8 +2,22 @@
   "extends": "astro/tsconfigs/base",
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": { "~/*": ["src/*"] },
-    "resolveJsonModule": true
+    "paths": {
+      "~/*": [
+        "src/*"
+      ]
+    },
+    "resolveJsonModule": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "strict": false
   },
-  "exclude": ["dist", ".astro", "node_modules", "vitest.config.ts", "playwright.config.ts", "tests"]
+  "exclude": [
+    "dist",
+    ".astro",
+    "node_modules",
+    "vitest.config.ts",
+    "playwright.config.ts",
+    "tests"
+  ]
 }
