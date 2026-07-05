@@ -1,5 +1,7 @@
 # Oriz Janaushdhi
 
+[![GitHub stars](https://img.shields.io/github/stars/chirag127/janaushdhi-app?style=social)](https://github.com/chirag127/janaushdhi-app/stargazers)
+
 > Read-only catalog of the Pradhan Mantri Bhartiya Janaushadhi Pariyojana (PMBJP) generic medicine list — search, filter, compare prices, and locate the nearest PMBJP Kendra.
 
 **Live at**: <https://janaushdhi.oriz.in> · **Status**: scaffold
