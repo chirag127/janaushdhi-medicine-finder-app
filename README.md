@@ -12,14 +12,14 @@ A static directory of generic medicines sold through the PMBJP scheme, sourced f
 
 ## Per-feature inventory
 
-| Feature | Status |
-| --- | --- |
-| Medicine catalog (search + filter) | 📜 planned |
-| Per-medicine detail page | 📜 planned |
-| Nearest Kendra lookup | 📜 planned |
+| Feature                                | Status     |
+| -------------------------------------- | ---------- |
+| Medicine catalog (search + filter)     | 📜 planned |
+| Per-medicine detail page               | 📜 planned |
+| Nearest Kendra lookup                  | 📜 planned |
 | Weekly CSV refresh from `pmbjp.gov.in` | 📜 planned |
-| Account / sign-in (shared) | 📜 planned |
-| Legal pages | 📜 planned |
+| Account / sign-in (shared)             | 📜 planned |
+| Legal pages                            | 📜 planned |
 
 ## App-specific env vars
 
@@ -28,8 +28,8 @@ None beyond the family-wide set at `templates/.env.example`.
 ## Local dev
 
 ```bash
-# from the workspace root (c:/D/oriz)
-pnpm -F @chirag127/oriz-janaushdhi dev
+pnpm install --ignore-workspace
+pnpm dev
 ```
 
 ## Knowledge

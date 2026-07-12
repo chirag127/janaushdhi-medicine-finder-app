@@ -90,6 +90,8 @@ const facets = {
     <meta property="og:site_name" content="janaushdhi · oriz" />
     <meta name="theme-color" content="#0F766E" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
     {import.meta.env.PUBLIC_ADSENSE_CLIENT && (
       <script
         is:inline
@@ -268,5 +270,13 @@ const facets = {
         body { padding-bottom: 64px; }
       }
     </style>
+
+    <script is:inline>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {})
+        })
+      }
+    </script>
   </body>
 </html>

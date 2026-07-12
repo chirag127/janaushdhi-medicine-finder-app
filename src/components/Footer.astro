@@ -9,7 +9,7 @@
  *
  * Palette: bone-white #FAFAF9 / medical-green #0F766E / alert amber.
  */
-import LegalFooter from '@chirag127/astro-chrome/legal/LegalFooter.astro'
+const year = new Date().getFullYear()
 ---
 <footer class="jn-footer" role="contentinfo">
   <div class="jn-grid">
@@ -54,10 +54,20 @@ import LegalFooter from '@chirag127/astro-chrome/legal/LegalFooter.astro'
       or doctor before substituting any medication. <a href="/disclaimer/">Read the full disclaimer.</a>
     </p>
   </div>
-  <LegalFooter
-    appName="Oriz Janaushdhi"
-    bio="Free price intelligence for Pradhan Mantri Jan Aushadhi medicines. No ads."
-  />
+  <div class="jn-legal">
+    <p class="jn-legal-bio">
+      <strong>Oriz Janaushdhi</strong> — free price intelligence for Pradhan Mantri Jan Aushadhi medicines. No ads.
+    </p>
+    <nav class="jn-legal-links" aria-label="Legal">
+      <a href="/about/">About</a>
+      <a href="/disclaimer/">Disclaimer</a>
+      <a href="/privacy/">Privacy</a>
+      <a href="/terms/">Terms</a>
+      <a href="/refunds/">Refunds</a>
+      <a href="/contact/">Contact</a>
+    </nav>
+    <p class="jn-legal-copy">© {year} oriz · <span class="mono">janaushdhi.oriz.in</span></p>
+  </div>
 </footer>
 <style>
   .jn-footer {
@@ -96,4 +106,14 @@ import LegalFooter from '@chirag127/astro-chrome/legal/LegalFooter.astro'
   .jn-disclaimer a { color: var(--color-accent, #0F766E); text-decoration: underline; }
   @media (min-width: 768px) { .jn-grid { grid-template-columns: repeat(3, 1fr); gap: 40px; padding: 48px 24px 20px; } .jn-disclaimer { margin-top: 16px; padding: 20px 24px; } }
   @media (min-width: 1024px) { .jn-grid { padding: 56px 24px 24px; } }
+
+  .jn-legal { max-width: 1200px; margin: 0 auto; padding: 20px 16px 40px; color: var(--color-muted, #475569); font-size: 13px; }
+  .jn-legal-bio { margin: 0 0 12px; }
+  .jn-legal-bio strong { color: var(--color-fg, #0F172A); }
+  .jn-legal-links { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 0 0 12px; }
+  .jn-legal-links a { color: var(--color-fg, #0F172A); text-decoration: none; }
+  .jn-legal-links a:hover { color: var(--color-accent, #0F766E); text-decoration: underline; }
+  .jn-legal-copy { margin: 0; font-size: 12px; }
+  .jn-legal-copy .mono { font-family: var(--font-utility, 'IBM Plex Mono'), ui-monospace; }
+  @media (min-width: 768px) { .jn-legal { padding: 24px 24px 48px; } }
 </style>

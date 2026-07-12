@@ -1,0 +1,44 @@
+name: prerelease
+
+on:
+  push:
+    branches: [main]
+    tags-ignore: ['**']
+    paths-ignore:
+      - 'data/**'
+      - '**/*.md'
+      - '.github/**'
+
+concurrency:
+  group: prerelease-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  prerelease:
+    # Skip daily data-scrape bot commits.
+    if: github.actor != 'oriz-bot' && !contains(github.event.head_commit.message, 'data: daily scrape')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --ignore-workspace
+      - run: pnpm build
+      - name: Tarball dist
+        run: tar -czf janaushdhi-dist.tar.gz -C dist .
+      - name: Compute tag
+        id: tag
+        run: echo "tag=prerelease-$(date -u +%Y%m%d)-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+      - name: Publish prerelease
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          prerelease: true
+          name: ${{ steps.tag.outputs.tag }}
+          files: janaushdhi-dist.tar.gz

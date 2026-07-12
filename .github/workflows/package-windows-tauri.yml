@@ -1,0 +1,93 @@
+name: package-windows-tauri
+
+# Builds UNSIGNED Windows installers (NSIS .exe + MSI) wrapping
+# https://janaushdhi.oriz.in via a minimal Tauri v2 shell, and attaches them to
+# the prerelease that triggered it.
+# NOTE: installers are UNSIGNED — code-signing certs are a deliberate blocker
+# (never generated or committed here). SmartScreen will warn until signed.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+concurrency:
+  group: package-windows-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  tauri:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Scaffold minimal Tauri shell → janaushdhi.oriz.in
+        shell: bash
+        run: |
+          mkdir -p shell/src-tauri/icons
+          cp public/icons/icon-512.png shell/src-tauri/icons/icon.png
+          cat > shell/src-tauri/tauri.conf.json <<'EOF'
+          {
+            "$schema": "https://schema.tauri.app/config/2",
+            "productName": "Janaushdhi",
+            "version": "0.1.0",
+            "identifier": "in.oriz.janaushdhi",
+            "build": { "frontendDist": "https://janaushdhi.oriz.in" },
+            "app": {
+              "windows": [
+                { "title": "Janaushdhi", "width": 1200, "height": 800, "url": "https://janaushdhi.oriz.in" }
+              ]
+            },
+            "bundle": {
+              "active": true,
+              "targets": ["nsis", "msi"],
+              "icon": ["icons/icon.png"]
+            }
+          }
+          EOF
+          cat > shell/src-tauri/Cargo.toml <<'EOF'
+          [package]
+          name = "janaushdhi"
+          version = "0.1.0"
+          edition = "2021"
+
+          [build-dependencies]
+          tauri-build = { version = "2", features = [] }
+
+          [dependencies]
+          tauri = { version = "2", features = [] }
+
+          [[bin]]
+          name = "janaushdhi"
+          path = "src/main.rs"
+          EOF
+          cat > shell/src-tauri/build.rs <<'EOF'
+          fn main() { tauri_build::build() }
+          EOF
+          mkdir -p shell/src-tauri/src
+          cat > shell/src-tauri/src/main.rs <<'EOF'
+          fn main() { tauri::Builder::default().run(tauri::generate_context!()).expect("error"); }
+          EOF
+      - name: Install Tauri CLI
+        run: npm i -g @tauri-apps/cli@2
+      - name: Build NSIS + MSI (unsigned)
+        working-directory: shell/src-tauri
+        run: tauri build --bundles nsis msi
+      - name: Collect installers
+        shell: bash
+        run: |
+          mkdir -p out
+          find shell/src-tauri/target -type f \( -name '*.exe' -o -name '*.msi' \) -path '*bundle*' -exec cp {} out/ \;
+          ls -la out || true
+      - name: Attach to prerelease
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: out/*
