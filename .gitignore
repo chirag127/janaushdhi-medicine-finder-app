@@ -8,6 +8,9 @@ node_modules/
 # Astro
 .astro/
 dist/
+# Playwright
+playwright-report/
+test-results/
 # Editor
 .vscode/
 .idea/
